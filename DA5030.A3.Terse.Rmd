@@ -1,0 +1,127 @@
+---
+title: "DA.A3"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+install.packages("class", repos = "http://cran.us.r-project.org")
+install.packages("gmodels", repos = "http://cran.us.r-project.org")
+install.packages("ISLR", repos = "http://cran.us.r-project.org")
+install.packages("caret", dependencies = c("Depends", "Suggests", "Imports"), repos = "http://cran.us.r-project.org")
+install.packages("lattice", repos = "http://cran.us.r-project.org")
+install.packages("ggplot2", repos = "http://cran.us.r-project.org")
+install.packages("e1071",repos = "http://cran.us.r-project.org")
+
+```
+1. Download the data set for the tutorial.
+
+```{r}
+library(class)
+library(gmodels)
+
+setwd("C:/Users/omkar/OneDrive/Desktop/R/DA5030.A3")
+
+dataurl <- "https://da5030.weebly.com/uploads/8/6/5/9/8659576/prostate_cancer.csv"
+download.file(url=dataurl, destfile = "prostate_cancer")
+c.data <- read.csv("prostate_cancer.csv",stringsAsFactors = FALSE)
+str(c.data)
+```
+
+
+2. Follow this tutorial on applying kNN to prostate cancer detection and implement all of the steps in an R Notebook. Make sure to explain each step and what it does. 
+
+```{r}
+#k-NN using class package
+
+c.data <- c.data[-1]
+#c.data
+
+table(c.data$diagnosis_result)
+c.data$diagnosis <- factor(c.data$diagnosis_result, levels = c("B","M"), labels = c("Benign","Malignant"))
+round(prop.table(table(c.data$diagnosis))*100, digits = 1)
+
+#normalizing numeric data
+normalize <- function(x){
+  return ((x-min(x))/(max(x)-min(x)))
+  }
+  
+#applying function to available data
+c.data_n <- as.data.frame(lapply(c.data[2:9], normalize))
+#summary(c.data_n)
+
+#splitting data set into train and test
+c.data_train <- c.data_n[1:65,]
+c.data_test <- c.data_n[66:100,]
+
+c.data_train_labels <- c.data[1:65,1]
+c.data_test_labels <- c.data[66:100,1]
+
+c.data_test_pred <- knn(train = c.data_train,test = c.data_test, cl = c.data_train_labels,k = 10)
+
+CrossTable(x = c.data_test_labels,y = c.data_test_pred,prop.chisq = FALSE)
+```
+
+
+3. Once you've complete the tutorial, try another kNN implementation from another package, such as the caret package. Compare the accuracy of the two implementations.
+A. The kNN implementation from class package gives an accuracy of 0.5714 and using caret package gives an accuracy of 0.9583.
+
+```{r}
+#k-NN using caret package
+
+setwd("C:/Users/omkar/OneDrive/Desktop/R/DA5030.A3")
+library(ISLR)
+library(caret)
+library(lattice)
+library(ggplot2)
+
+set.seed(300)
+
+indxTrain <- createDataPartition(y = c.data$diagnosis_result, p = 0.75,list = FALSE)
+training <- c.data[indxTrain,]
+testing <- c.data[-indxTrain,]
+
+prop.table(table(training$diagnosis_result)) * 100
+
+prop.table(table(testing$diagnosis_result)) * 100
+
+prop.table(table(c.data$diagnosis_result)) * 100
+
+#Preprocessing
+trainX <- training[,names(training) != "diagnosis_result"]
+preProcValues <- preProcess(x = trainX,method = c("center", "scale"))
+
+#Training and train control
+set.seed(400)
+ctrl <- trainControl(method = "repeatedcv", repeats = 3)
+knnFit <- train(diagnosis_result ~ ., data = training, method = "knn", trControl = ctrl, preProcess = c("center", "scale"), tuneLength = 20)
+
+plot(knnFit)
+
+knnFit
+
+```
+
+
+4.Try the confusionMatrix function from the caret package to determine the accuracy of both algorithms.
+A. The kNN implementation from class package gives an accuracy of 0.5714 and using caret package gives an accuracy of 0.9583. Thus, caret package provides a more accurate model in this case.
+
+```{r}
+#Getting confusion matrix for algorith 1
+test_value <- as.factor(c.data_test_labels)
+confusionMatrix(c.data_test_pred, test_value)
+
+knnPredict <- predict(knnFit,newdata = testing)
+
+#Getting confusion matrix for algorith 2
+diag <- as.factor(testing$diagnosis_result)
+confusionMatrix(knnPredict, diag)
+```
+
