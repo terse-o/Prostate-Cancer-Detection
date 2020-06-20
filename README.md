@@ -10,10 +10,17 @@ Packages: class, gmodels, ISLR, caret, lattice, ggplot2, e1071
 Model: kNN
 
 OVERVIEW:
+
 -Load data
+
 -Normalize
+
 -Split into train and test sets
+
 -Apply kNN algorithm from class package on training set
+
 -Apply kNN algorithm from caret package on training set
+
 -Use trained model to predict known values from test set
+
 -Create confusion matrix to evaluate the 2 models
