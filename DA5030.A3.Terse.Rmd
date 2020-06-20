@@ -36,7 +36,8 @@ str(c.data)
 ```
 
 
-2. Follow this tutorial on applying kNN to prostate cancer detection and implement all of the steps in an R Notebook. Make sure to explain each step and what it does. 
+2. Normalize Data, split into training and testing subset, and create kNN classifier model with 'class' package
+
 
 ```{r}
 #k-NN using class package
@@ -70,8 +71,7 @@ CrossTable(x = c.data_test_labels,y = c.data_test_pred,prop.chisq = FALSE)
 ```
 
 
-3. Once you've complete the tutorial, try another kNN implementation from another package, such as the caret package. Compare the accuracy of the two implementations.
-A. The kNN implementation from class package gives an accuracy of 0.5714 and using caret package gives an accuracy of 0.9583.
+3. 'caret' package kNN model
 
 ```{r}
 #k-NN using caret package
@@ -110,8 +110,7 @@ knnFit
 ```
 
 
-4.Try the confusionMatrix function from the caret package to determine the accuracy of both algorithms.
-A. The kNN implementation from class package gives an accuracy of 0.5714 and using caret package gives an accuracy of 0.9583. Thus, caret package provides a more accurate model in this case.
+4. Evaluate kNN classifiers
 
 ```{r}
 #Getting confusion matrix for algorith 1
