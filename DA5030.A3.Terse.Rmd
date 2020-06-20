@@ -21,7 +21,7 @@ install.packages("ggplot2", repos = "http://cran.us.r-project.org")
 install.packages("e1071",repos = "http://cran.us.r-project.org")
 
 ```
-1. Download the data set for the tutorial.
+1. Download data set 
 
 ```{r}
 library(class)
