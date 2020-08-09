@@ -1,17 +1,17 @@
-Prostate Cancer Detection
+**Prostate Cancer Detection**
 
-Language: R
+**Language:** R
 
-Editor: RStudio (v1.2.1335)
+**Editor:** RStudio (v1.2.1335)
 
-Description: Implemented kNN algorithm from 2 different packages to classify whether the prostate cancer in the patient is benign or malignant.
+**Description:** Implemented kNN algorithm from 2 different packages to classify whether the prostate cancer in the patient is benign or malignant.
 
-NOTE: 
+**NOTE:** 
 Link for dataset: https://drive.google.com/file/d/1MtjBKmDHFVG5PgKJg-9V3HYvuCwsehIC/view?usp=sharing
-Packages: class, gmodels, ISLR, caret, lattice, ggplot2, e1071
-Model: kNN
+**Packages:** *class, gmodels, ISLR, caret, lattice, ggplot2, e1071*
+**Model:** kNN
 
-OVERVIEW:
+**OVERVIEW:**
 
 -Load data
 
